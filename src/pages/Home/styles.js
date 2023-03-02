@@ -5,6 +5,7 @@ export const Container = styled.div`
   width: 100%;
   height: 100vh;
 
+
   display: grid;
   grid-template-columns: 15.625rem auto;
   grid-template-rows: 6.5625rem 8rem auto 4rem;
