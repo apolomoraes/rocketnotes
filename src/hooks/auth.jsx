@@ -29,6 +29,13 @@ function AuthProvider({ children }) {
     }
   }
 
+  //está função é para sair da conta
+  function signOut() {
+    localStorage.removeItem("@rocketnotes:token");
+    localStorage.removeItem("@rocketnotes:user");
+
+    setData({});
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("@rocketnotes:token");
@@ -45,7 +52,11 @@ function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signIn, user: data.user }} >
+    <AuthContext.Provider value={{
+      signIn,
+      user: data.user,
+      signOut
+    }} >
       {children}
     </AuthContext.Provider>
   )
