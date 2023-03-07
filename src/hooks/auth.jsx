@@ -37,6 +37,24 @@ function AuthProvider({ children }) {
     setData({});
   }
 
+  //função para atualizar informação do usuário
+  async function updateProfile({ user }) {
+    try {
+      await api.put("/users", user);
+      localStorage.setItem("@rocketnotes:user", JSON.stringify(user));
+
+      setData({ user, token: data.token });
+      Toast().handleSuccess("Perfil Atualizado!");
+
+    } catch (error) {
+      if (error.response) {
+        Toast().handleError(error.response.data.message);
+      } else {
+        Toast().handleError("Não foi possível atualizar o perfil, tente novamente mais tarde");
+      }
+    }
+  }
+
   useEffect(() => {
     const token = localStorage.getItem("@rocketnotes:token");
     const user = localStorage.getItem("@rocketnotes:user");
@@ -54,8 +72,9 @@ function AuthProvider({ children }) {
   return (
     <AuthContext.Provider value={{
       signIn,
+      signOut,
+      updateProfile,
       user: data.user,
-      signOut
     }} >
       {children}
     </AuthContext.Provider>
