@@ -43,6 +43,18 @@ export function New() {
   }
 
   async function handleNewNote() {
+    if (!title) {
+      return Toast().handleInfo("Digite o título da nota");
+    }
+
+    if (newLink) {
+      return Toast().handleInfo("Você deixou um link no campo para adicionar, mas não adicionou. Clique em + ou deixe o campo vazio");
+    }
+
+    if (newTag) {
+      return Toast().handleInfo("Você deixou uma tag no campo para adicionar, mas não adicionou. Clique em + ou deixe o campo vazio");
+    }
+
     await api.post("/notes", {
       title,
       description,
