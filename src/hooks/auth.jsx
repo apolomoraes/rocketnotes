@@ -38,9 +38,20 @@ function AuthProvider({ children }) {
   }
 
   //função para atualizar informação do usuário
-  async function updateProfile({ user }) {
+  async function updateProfile({ user, avatarFile }) {
     try {
+      if (avatarFile) {
+        const fileUploadForm = new FormData();
+        fileUploadForm.append("avatar", avatarFile);
+
+        const response = await api.patch("/users/avatar", fileUploadForm);
+        user.avatar = response.data.avatar;
+      }
+
       await api.put("/users", user);
+
+      user.password = '';
+      user.new_password = '';
       localStorage.setItem("@rocketnotes:user", JSON.stringify(user));
 
       setData({ user, token: data.token });
