@@ -1,47 +1,86 @@
-import { Container, Content } from "./styles"
-import { Button } from "../../components/Button"
-import { Header } from "../../components/Header"
-import { Section } from "../../components/Section"
-import { Tag } from "../../components/Tag"
-import { Links } from "./styles"
-import { ButtonText } from "../../components/ButtonText"
+import { useState, useEffect } from "react";
+import { Container, Content } from "./styles";
+import { api } from "../../services/api";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "../../components/Button";
+import { Header } from "../../components/Header";
+import { Section } from "../../components/Section";
+import { Tag } from "../../components/Tag";
+import { Links } from "./styles";
+import { ButtonText } from "../../components/ButtonText";
 
 
 export function Details() {
+  const [data, setData] = useState(null);
+
+  const params = useParams();
+  const navigate = useNavigate();
+
+  function handleBack() {
+    navigate("/");
+  }
+
+  useEffect(() => {
+    async function fetchNote() {
+      const response = await api.get(`/notes/${params.id}`);
+      setData(response.data);
+    }
+
+    fetchNote();
+  }, []);
+
   return (
     <Container>
       <Header />
 
-      <main>
-        <Content>
-          <ButtonText title="Excluir nota" />
+      {
+        data &&
+        <main>
+          <Content>
+            <ButtonText title="Excluir nota" />
 
-          <h1>
-            Introdução ao React
-          </h1>
+            <h1>
+              {data.title}
+            </h1>
 
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia quod iusto error incidunt qui velit impedit eaque minus, delectus quidem nulla quaerat eveniet debitis repellendus temporibus, molestias sapiente commodi in? Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus error sapiente dolores at voluptatibus fugiat illo, quasi iusto quo reiciendis veritatis unde adipisci dolore ad blanditiis quis repellat sequi eligendi!</p>
+            <p>
+              {data.description}
+            </p>
 
-          <Section title="Links úteis">
-            <Links>
-              <li>
-                <a href="#" target="_blank">https://www.rocketseat.com.br/</a>
-              </li>
-              <li>
-                <a href="#" target="_blank">https://www.rocketseat.com.br/</a>
-              </li>
-            </Links>
-          </Section>
+            {
+              data.links &&
+              <Section title="Links úteis">
+                <Links>
+                  {
+                    data.links.map(link => (
+                      <li key={String(link.id)} >
+                        <a href={`https://${link.url}`} target="_blank">{link.url}</a>
+                      </li>
+                    ))
+                  }
+                </Links>
+              </Section>
+            }
 
-          <Section title="Tags">
-            <Tag title="rocket" />
-            <Tag title="rocket" />
-          </Section>
+            {
+              data.tags &&
+              <Section title="Tags">
+                {
+                  data.tags.map(tag => (
+                    <Tag
+                      key={String(tag.id)}
+                      title={tag.name}
+                    />
+                  ))
+                }
+              </Section>
+            }
 
 
-          <Button title="Voltar" />
-        </Content>
-      </main>
+            <Button title="Voltar" onClick={handleBack} />
+          </Content>
+        </main>
+      }
     </Container>
   )
 }
