@@ -8,16 +8,37 @@ import { Section } from "../../components/Section";
 import { Tag } from "../../components/Tag";
 import { Links } from "./styles";
 import { ButtonText } from "../../components/ButtonText";
+import { Toast } from "../../Toast";
+import Modal from "react-modal";
+import "./styles.css"
 
+Modal.setAppElement("#root");
 
 export function Details() {
   const [data, setData] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const params = useParams();
   const navigate = useNavigate();
 
   function handleBack() {
     navigate("/");
+  }
+
+  function openModal() {
+    setModalIsOpen(true);
+  }
+
+  function closeModal() {
+    setModalIsOpen(false);
+  }
+
+  async function handleRemove() {
+    await api.delete(`/notes/${params.id}`);
+
+    Toast().handleSuccess("Nota excluída com sucesso");
+    closeModal();
+    handleBack();
   }
 
   useEffect(() => {
@@ -37,7 +58,24 @@ export function Details() {
         data &&
         <main>
           <Content>
-            <ButtonText title="Excluir nota" />
+            <ButtonText
+              title="Excluir nota"
+              onClick={openModal}
+            />
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              contentLabel="Modal remove note"
+              overlayClassName="modal-overlay"
+              className="modal-content"
+            >
+              <h2>Deseja realmente remover a nota?</h2>
+              <div>
+                <button onClick={handleRemove} >Sim</button>
+                <button onClick={closeModal} >Não</button>
+              </div>
+            </Modal>
+
 
             <h1>
               {data.title}

@@ -1,0 +1,38 @@
+.modal-overlay {
+  background: transparent;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 60%;
+  max-width: 20rem;
+  background-color: #232129;
+  padding: 1rem;
+  border-radius: 5px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content div {
+  display: flex;
+  gap: 2rem;
+}
+
+.modal-content button {
+  border: none;
+  background: transparent;
+  color: #F4EDE8;
+}
