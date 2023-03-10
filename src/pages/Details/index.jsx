@@ -22,7 +22,7 @@ export function Details() {
   const navigate = useNavigate();
 
   function handleBack() {
-    navigate("/");
+    navigate(-1);
   }
 
   function openModal() {
@@ -86,7 +86,7 @@ export function Details() {
             </p>
 
             {
-              data.links &&
+              data.links.length > 0 &&
               <Section title="Links úteis">
                 <Links>
                   {
@@ -101,7 +101,7 @@ export function Details() {
             }
 
             {
-              data.tags &&
+              data.tags.length > 0 &&
               <Section title="Tags">
                 {
                   data.tags.map(tag => (

@@ -6,7 +6,7 @@ import { Textarea } from '../../components/Textarea';
 import { NoteItem } from '../../components/NoteItem';
 import { Section } from '../../components/Section';
 import { Button } from '../../components/Button';
-import { Link } from 'react-router-dom';
+import { ButtonText } from '../../components/ButtonText';
 import { Container, Form } from './styles';
 import { api } from '../../services/api';
 import { Toast } from '../../Toast';
@@ -23,6 +23,10 @@ export function New() {
 
   const navigate = useNavigate();
 
+  function handleBack() {
+    navigate(-1);
+  }
+
   function handleAddLink() {
     setLinks(prevState => [...prevState, newLink])
     setNewLink("");
@@ -31,7 +35,6 @@ export function New() {
   function handleRemoveLink(linkDeleted) {
     setLinks(prevState => prevState.filter(link => link !== linkDeleted));
   }
-
 
   function handleAddTag() {
     setTags(prevState => [...prevState, newTag]);
@@ -55,6 +58,14 @@ export function New() {
       return Toast().handleInfo("Você deixou uma tag no campo para adicionar, mas não adicionou. Clique em + ou deixe o campo vazio");
     }
 
+    if (links.length === 0) {
+      return Toast().handleInfo("Adicione pelo menos um link")
+    }
+
+    if (tags.length === 0) {
+      return Toast().handleInfo("Adicione pelo menos uma tag")
+    }
+
     await api.post("/notes", {
       title,
       description,
@@ -63,7 +74,7 @@ export function New() {
     });
 
     Toast().handleSuccess("Nota criada com sucesso");
-    navigate("/");
+    navigate(-1);
   }
 
   return (
@@ -74,7 +85,10 @@ export function New() {
         <Form>
           <header>
             <h1>Criar nota</h1>
-            <Link to="/">voltar</Link>
+            <ButtonText
+              title="Voltar"
+              onClick={handleBack}
+            />
           </header>
 
           <Input
