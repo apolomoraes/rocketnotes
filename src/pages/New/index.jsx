@@ -86,7 +86,7 @@ export function New() {
           <header>
             <h1>Criar nota</h1>
             <ButtonText
-              title="Voltar"
+              title="voltar"
               onClick={handleBack}
             />
           </header>
