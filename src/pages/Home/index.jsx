@@ -8,12 +8,14 @@ import { Note } from '../../components/Note'
 import { Section } from '../../components/Section'
 import { ButtonText } from '../../components/ButtonText'
 import { api } from '../../services/api'
+import { Loading } from '../../components/Loading';
 
 export function Home() {
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([]);
   const [tagsSelected, setTagsSelected] = useState([]);
   const [notes, setNotes] = useState([]);
+  const [showLoading, setShowLoading] = useState(false);
 
 
   const navigate = useNavigate();
@@ -48,8 +50,10 @@ export function Home() {
 
   useEffect(() => {
     async function fetchNotes() {
+      setShowLoading(true);
       const response = await api.get(`/notes?title=${search}&tags=${tagsSelected}`);
       setNotes(response.data);
+      setShowLoading(false);
     }
 
     fetchNotes();
@@ -109,6 +113,8 @@ export function Home() {
       <NewNote to="/new">
         <FiPlus>Criar Nota</FiPlus>
       </NewNote>
+      {showLoading && <Loading />}
+
     </Container>
   )
 }

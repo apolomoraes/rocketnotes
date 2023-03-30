@@ -11,12 +11,15 @@ import { ButtonText } from "../../components/ButtonText";
 import { Toast } from "../../Toast";
 import Modal from "react-modal";
 import "./styles.css"
+import { Loading } from "../../components/Loading";
 
 Modal.setAppElement("#root");
 
 export function Details() {
   const [data, setData] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+
 
   const params = useParams();
   const navigate = useNavigate();
@@ -43,8 +46,10 @@ export function Details() {
 
   useEffect(() => {
     async function fetchNote() {
+      setShowLoading(true);
       const response = await api.get(`/notes/${params.id}`);
       setData(response.data);
+      setShowLoading(false);
     }
 
     fetchNote();
@@ -119,6 +124,8 @@ export function Details() {
           </Content>
         </main>
       }
+      {showLoading && <Loading />}
+
     </Container>
   )
 }

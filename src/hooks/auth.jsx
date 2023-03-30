@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { Loading } from '../components/Loading';
 import { api } from '../services/api';
 import { Toast } from "../Toast";
 
@@ -7,8 +8,10 @@ export const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
   const [data, setData] = useState({});
+  const [showLoading, setShowLoading] = useState(false);
 
   async function signIn({ email, password }) {
+    setShowLoading(true);
     try {
       const response = await api.post("/sessions", { email, password });
       const { user, token } = response.data;
@@ -21,12 +24,14 @@ function AuthProvider({ children }) {
 
       setData({ user, token });
     } catch (error) {
+
       if (error.response) {
         Toast().handleError(error.response.data.message);
       } else {
         Toast().handleError("Não foi possível entrar, tente novamente mais tarde");
       }
     }
+    setShowLoading(false);
   }
 
   //está função é para sair da conta
@@ -83,6 +88,7 @@ function AuthProvider({ children }) {
   return (
     <AuthContext.Provider value={{
       signIn,
+      showLoading,
       signOut,
       updateProfile,
       user: data.user,

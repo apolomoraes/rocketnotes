@@ -10,6 +10,7 @@ import { ButtonText } from '../../components/ButtonText';
 import { Container, Form } from './styles';
 import { api } from '../../services/api';
 import { Toast } from '../../Toast';
+import { Loading } from '../../components/Loading';
 
 export function New() {
   const [title, setTitle] = useState("");
@@ -20,6 +21,8 @@ export function New() {
 
   const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState("");
+
+  const [showLoading, setShowLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -66,6 +69,7 @@ export function New() {
       return Toast().handleInfo("Adicione pelo menos uma tag")
     }
 
+    setShowLoading(true);
     await api.post("/notes", {
       title,
       description,
@@ -73,6 +77,7 @@ export function New() {
       links
     });
 
+    setShowLoading(false);
     Toast().handleSuccess("Nota criada com sucesso");
     navigate(-1);
   }
@@ -148,6 +153,7 @@ export function New() {
           />
         </Form>
       </main>
+      {showLoading && <Loading />}
     </Container>
   )
 }

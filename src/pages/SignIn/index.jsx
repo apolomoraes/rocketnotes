@@ -10,12 +10,13 @@ import particlesOptions from "../../../particles.json";
 import React, { useCallback } from 'react';
 import { loadFull } from "tsparticles";
 import Particles from "react-particles";
+import { Loading } from '../../components/Loading';
 
 export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn } = useAuth();
+  const { signIn, showLoading } = useAuth();
 
   function handleSignIn() {
     signIn({ email, password });
@@ -40,6 +41,7 @@ export function SignIn() {
 
         <Link to="/register">Criar conta</Link>
       </Form>
+      {showLoading && <Loading />}
       <Background />
 
     </Container>

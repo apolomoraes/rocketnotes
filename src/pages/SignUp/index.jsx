@@ -10,11 +10,13 @@ import particlesOptions from "../../../particles.json";
 import { loadFull } from "tsparticles";
 import Particles from "react-particles";
 import { Toast } from "../../Toast";
+import { Loading } from "../../components/Loading";
 
 export function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showLoading, setShowLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,12 +25,15 @@ export function SignUp() {
       return Toast().handleError('Preencha todos os campos');
     }
 
+    setShowLoading(true);
     api.post("/users", { name, email, password })
       .then(() => {
+        setShowLoading(false);
         Toast().handleSuccess('Usuário cadastrado com sucesso');
         navigate("/")
       })
       .catch(error => {
+        setShowLoading(false);
         if (error.response) {
           Toast().handleError(error.response.data.message);
         } else {
@@ -75,6 +80,7 @@ export function SignUp() {
 
         <Link to="/" >Login</Link>
       </Form>
+      {showLoading && <Loading />}
 
     </Container>
   )
