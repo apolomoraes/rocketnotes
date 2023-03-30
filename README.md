@@ -25,6 +25,8 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 - ReactJS
 - NodeJS(Express)
+- SQLite
+- Knex
 
 ## 💻 Projeto
 
