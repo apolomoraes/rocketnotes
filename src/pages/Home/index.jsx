@@ -111,7 +111,8 @@ export function Home() {
       </Content>
 
       <NewNote to="/new">
-        <FiPlus>Criar Nota</FiPlus>
+        <FiPlus />
+        Criar nota
       </NewNote>
       {showLoading && <Loading />}
 
